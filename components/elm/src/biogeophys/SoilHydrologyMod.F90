@@ -832,6 +832,7 @@ contains
                      !h2osfc_tide =    h2osfc_tide    +  tide_coeff_amp(ii) * sin(2.0_r8*SHR_CONST_PI*(1/tide_coeff_period(ii)*(days*secspday+seconds) + tide_coeff_phase(ii)))
                      !equation fixed by Wei Huang on 7/7/2022
                      h2osfc_tide =    h2osfc_tide    +  tide_coeff_amp(ii) * sin(2.0_r8*SHR_CONST_PI/tide_coeff_period(ii)*(days*secspday+seconds) + tide_coeff_phase(ii))
+                     write(iulog,*), h2osfc_tide
                   enddo
                endif
 
@@ -840,7 +841,8 @@ contains
                 qflx_lat_aqu(2) = qflx_lat_aqu(2) + (h2osfc_tide-h2osfc(c))/dtime
                 write(iulog,*), 'qflx_lat_aqu(1)', qflx_lat_aqu(1)
                 write(iulog,*), 'qflx_lat_aqu(2)', qflx_lat_aqu(2)
-                write(iulog,*), 'h2osfc(c)', h2osfc(1), h2osfc(2)
+                write(iulog,*), 'qflx_lat_aqu(3)', qflx_lat_aqu(3)
+                write(iulog,*), 'h2osfc(c)', h2osfc(1), h2osfc(2), h2osfc(3)
                 ! If flooded water surface of one column is higher than the other, add faster flow since aquifer transfer (ka parameters) is slow
                 if(h2osfc(2)>0 .and. h2osfc(2)>(h2osfc(1)+humhol_ht*1000.0)) then
                   qflx_lat_aqu(2) = qflx_lat_aqu(2) - min((h2osfc(2)-(h2osfc(1)+humhol_ht*1000.0))*sfcflow_ratescale,h2osfc(2)*0.5/dtime)
@@ -994,10 +996,12 @@ contains
           qflx_lat_aqu       =>    col_wf%qflx_lat_aqu       , & ! Output: [real(r8) (:,:) ] total lateral flow
           qflx_lat_aqu_layer =>    col_wf%qflx_lat_aqu_layer , & ! Output: [real(r8) (:,:) ] lateral flow for each layer
 #endif
-#ifdef MARSH || COL3RD
+#ifdef MARSH
           qflx_tide          =>    col_wf%qflx_tide          , & ! Output: [real(r8) (:,:) ]
 #endif
-
+#ifdef COL3RD
+          qflx_tide          =>    col_wf%qflx_tide          , & ! Output: [real(r8) (:,:) ]
+#endif
           zwt                =>    soilhydrology_vars%zwt_col            , & ! Output: [real(r8) (:)   ]  water table depth (m)
           zwt_perched        =>    soilhydrology_vars%zwt_perched_col    , & ! Output: [real(r8) (:)   ]  perched water table depth (m)
           frost_table        =>    soilhydrology_vars%frost_table_col    , & ! Output: [real(r8) (:)   ]  frost table depth (m)
