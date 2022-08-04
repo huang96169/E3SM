@@ -866,7 +866,7 @@ contains
                      !h2osfc_tide =    h2osfc_tide    +  tide_coeff_amp(ii) * sin(2.0_r8*SHR_CONST_PI*(1/tide_coeff_period(ii)*(days*secspday+seconds) + tide_coeff_phase(ii)))
                      !equation fixed by Wei Huang on 7/7/2022
                      h2osfc_tide =    h2osfc_tide    +  tide_coeff_amp(ii) * sin(2.0_r8*SHR_CONST_PI/tide_coeff_period(ii)*(days*secspday+seconds) + tide_coeff_phase(ii))
-                     write(iulog,*), 'h2osfc_tide=',h2osfc_tide
+                     !write(iulog,*), 'h2osfc_tide=',h2osfc_tide
                   enddo
                endif
 
